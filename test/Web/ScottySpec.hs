@@ -30,9 +30,15 @@ spec =  do
         responseBody <- Helper.body <$> app `Helper.get` "/search?query=haskell"
         responseBody `shouldBe` "<p>haskell</p>"
 
-    describe "html" $
-      it "should return response in html" $ do
+    describe "html" $ do
+      it "should return response in text/html" $ do
         app <- scottyApp $
           get "/scotty" $ html "<p>scotty</p>"
         mContentType <- Helper.header "Content-Type" <$> app `Helper.get` "/scotty"
         mContentType `shouldBe` Just "text/html"
+
+      it "should return given string as html" $ do
+        app <- scottyApp $
+          get "/scotty" $ html "<p>scotty</p>"
+        responseBody <- Helper.body <$> app `Helper.get` "/scotty"
+        responseBody `shouldBe` "<p>scotty</p>"
